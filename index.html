@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Untitled Document</title>
+<script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+    import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-messaging.js";
+
+
+    const firebaseConfig = {
+    apiKey: "AIzaSyAbtjH2ZZHD9o4yJ5SRBYZ08JVuKQeUrok",
+    authDomain: "szgames-d9272.firebaseapp.com",
+    projectId: "szgames-d9272",
+    storageBucket: "szgames-d9272.appspot.com",
+    messagingSenderId: "733530201740",
+    appId: "1:733530201740:web:e0e6e8f287086121ab65a9"
+  };
+  const app = initializeApp(firebaseConfig);
+
+  const messaging = getMessaging();
+
+
+  Notification.requestPermission()
+  .then((permission) => {
+    if (permission === "granted") {
+      console.log('Notification permission granted.');
+      return getToken(messaging, { vapidKey: 'BLGbMijNv2SC_E_c-qloKlaJZiqT8O8KSofKXmafvDxhzz_k3qv4Q-SONsOd2V-xEM2U-wOqEiTtMAsG0zb3dZA' });
+    } else {
+      console.log('Notification permission denied.');
+      throw new Error('Permission denied');
+    }
+  })
+  .then((currentToken) => {
+    console.log('FCM token:', currentToken);
+    // Send the token to your server or handle it as needed
+  })
+  .catch((error) => {
+    console.log('Error requesting permission:', error);
+  });
+
+onMessage(messaging, (payload) => {
+  console.log('Notification received:', payload);
+  // Handle the notification here
+});
+</script>
+
+</head>
+
+<body>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('firebase-messaging-sw.js')
+            .then(function(registration) {
+              console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(function(error) {
+              console.log('Service Worker registration failed:', error);
+            });
+        }
+      </script>
+      
+</body>
+</html>
